@@ -64,4 +64,7 @@ class NotesDataBaseHelper(context: Context): SQLiteOpenHelper(context, DATABASE_
         return noteList
     }
 
+    //updateNote
+
+
 }
