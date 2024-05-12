@@ -43,6 +43,7 @@ class NotesDataBaseHelper(context: Context): SQLiteOpenHelper(context, DATABASE_
     }
 
     //Retrieve data
+    //this function needs to return a List(:List<Note>)
     fun getAllNotes(): List<Note>{
         val noteList = mutableListOf<Note>()
         val db = readableDatabase
@@ -65,6 +66,7 @@ class NotesDataBaseHelper(context: Context): SQLiteOpenHelper(context, DATABASE_
     }
 
     //updateNote
+    //pass note as the parameter
     fun updateNote(note:Note){
         val db = writableDatabase
         val values = ContentValues().apply { this
@@ -79,6 +81,33 @@ class NotesDataBaseHelper(context: Context): SQLiteOpenHelper(context, DATABASE_
     }
 
     //getOneNote by its id
+    //this function needs to return a Note(:Note)
+    fun getNoteById(noteId:Int): Note{
+        val db = readableDatabase
+        val query = "SELECT * FROM $TABLE_NAME WHERE $COLUMN_ID = $noteId"
+        val cursor = db.rawQuery(query,null)
+        //move the cursor to the first row
+        cursor.moveToFirst()
 
+        val id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID))
+        val title = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TITLE))
+        val content = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CONTENT))
+
+        cursor.close()
+        db.close()
+        return Note(id,title,content)
+    }
+
+    //1)delete function
+    //2)set it on delete Btn
+    fun deleteNote(noteId: Int){
+        //deleting means modifying the database so we wrote 'writableDatabase'
+        val db = writableDatabase
+        //for the question mark it will take whereArgs(? = whereArgs)
+        val whereClause = "$COLUMN_ID = ?"
+        val whereArgs = arrayOf(noteId.toString())
+        db.delete(TABLE_NAME,whereClause,whereArgs)
+        db.close()
+    }
 
 }
