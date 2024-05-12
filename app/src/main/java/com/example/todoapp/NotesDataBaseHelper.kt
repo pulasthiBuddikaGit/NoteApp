@@ -65,6 +65,20 @@ class NotesDataBaseHelper(context: Context): SQLiteOpenHelper(context, DATABASE_
     }
 
     //updateNote
+    fun updateNote(note:Note){
+        val db = writableDatabase
+        val values = ContentValues().apply { this
+            put(COLUMN_TITLE,note.title)
+            put(COLUMN_CONTENT, note.content)
+        }
+        //identify which data to be update using column id
+        val whereClause = "$COLUMN_ID = ?"
+        val whereArgs = arrayOf(note.id.toString())
+        db.update(TABLE_NAME,values,whereClause,whereArgs)
+        db.close()
+    }
+
+    //getOneNote by its id
 
 
 }
