@@ -54,6 +54,7 @@ class NotesAdapter(private var notes: List<Note>, context: Context): RecyclerVie
             //we need to refresh data whenever we delete a note
             //require array as a argument
             refreshData(db.getAllNotes())
+            //toast msg for adapter
             Toast.makeText(holder.itemView.context,"Note deleted",Toast.LENGTH_SHORT).show()
         }
     }

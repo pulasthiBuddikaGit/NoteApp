@@ -46,6 +46,7 @@ class UpdateNoteActivity : AppCompatActivity() {
             db.updateNote(updatedNote)
             //after updating note return back to mainActivity
             finish()
+            //toast msg for an activity
             Toast.makeText(this,"Changes saved",Toast.LENGTH_SHORT).show()
         }
 
