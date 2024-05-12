@@ -31,6 +31,7 @@ class NotesDataBaseHelper(context: Context): SQLiteOpenHelper(context, DATABASE_
         onCreate(db)
     }
 
+    //Add
     fun insertNote(note: Note){
         val db = writableDatabase
         val values = ContentValues().apply { this
@@ -39,6 +40,28 @@ class NotesDataBaseHelper(context: Context): SQLiteOpenHelper(context, DATABASE_
         }
         db.insert(TABLE_NAME,null,values)
         db.close()
+    }
+
+    //Retrieve data
+    fun getAllNotes(): List<Note>{
+        val noteList = mutableListOf<Note>()
+        val db = readableDatabase
+        val query = "SELECT * FROM $TABLE_NAME"
+        //cursor is used to iterate through the rows of the table
+        val cursor = db.rawQuery(query, null)
+
+        while (cursor.moveToNext()){
+            val id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID))
+            val title = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TITLE))
+            val content = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CONTENT))
+
+            val note = Note(id,title,content)
+            noteList.add(note)
+        }
+        cursor.close()
+        db.close()
+        //return is necessary bcz we need to display these retrieve data in mainActivity
+        return noteList
     }
 
 }
