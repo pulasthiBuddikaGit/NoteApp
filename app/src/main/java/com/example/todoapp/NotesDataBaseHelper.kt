@@ -99,7 +99,7 @@ class NotesDataBaseHelper(context: Context): SQLiteOpenHelper(context, DATABASE_
     }
 
     //1)delete function
-    //2)set it on delete Btn
+    //2)set it on delete Btn(for that go to notesAdapter)
     fun deleteNote(noteId: Int){
         //deleting means modifying the database so we wrote 'writableDatabase'
         val db = writableDatabase

@@ -7,11 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
 //this adapter is responsible for provide the views that represent in a data set
 class NotesAdapter(private var notes: List<Note>, context: Context): RecyclerView.Adapter<NotesAdapter.NoteViewHolder>(){
 
+    //access notesDatabaseHelper
+    private val db:NotesDataBaseHelper = NotesDataBaseHelper(context)
     class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         //initialize views and buttons
         val titleTextView: TextView = itemView.findViewById(R.id.titleTextView)
@@ -20,6 +23,8 @@ class NotesAdapter(private var notes: List<Note>, context: Context): RecyclerVie
         //1.either its not initialize
         //2.wrong id has assigned
         val updateButton: ImageView = itemView.findViewById(R.id.updateButton)
+        //initialize delete btn
+        val deleteBtn : ImageView = itemView.findViewById(R.id.deleteButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
@@ -41,6 +46,15 @@ class NotesAdapter(private var notes: List<Note>, context: Context): RecyclerVie
                 putExtra("note_id",note.id)
             }
             holder.itemView.context.startActivity(intent)
+        }
+
+        //2)call the deleteNote method
+        holder.deleteBtn.setOnClickListener{
+            db.deleteNote(note.id)
+            //we need to refresh data whenever we delete a note
+            //require array as a argument
+            refreshData(db.getAllNotes())
+            Toast.makeText(holder.itemView.context,"Note deleted",Toast.LENGTH_SHORT).show()
         }
     }
 
